@@ -1,0 +1,30 @@
+---
+title: "Building a Compiler, Part 1: Lexing"
+date: "2026-03-05"
+description: "Starting from scratch — what even is a compiler and how do you begin?"
+---
+
+This is the first post in a series where I try to build a compiler from scratch.
+I don't know exactly where it'll end up, but I'll document everything as I go.
+
+## Why a compiler?
+
+...
+
+## Starting with the lexer
+
+The first stage of any compiler is **lexing** (or tokenizing): taking raw source text and
+breaking it into meaningful tokens like keywords, identifiers, and operators.
+
+```python
+# Example token output for: x = 1 + 2
+[
+  Token(IDENT, "x"),
+  Token(ASSIGN, "="),
+  Token(INT, "1"),
+  Token(PLUS, "+"),
+  Token(INT, "2"),
+]
+```
+
+More to come in Part 2.
