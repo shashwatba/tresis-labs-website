@@ -1,6 +1,28 @@
 import Link from "next/link";
 import { getPostMetas } from "@/lib/posts";
 
+function PostList({ posts, href }: { posts: ReturnType<typeof getPostMetas>; href: string }) {
+  return posts.length === 0 ? (
+    <p className="text-stone-400 text-sm italic">Nothing published yet.</p>
+  ) : (
+    <ul className="divide-y divide-stone-100 dark:divide-stone-900">
+      {posts.map((post) => (
+        <li key={post.slug}>
+          <Link
+            href={`${href}/${post.slug}`}
+            className="group flex items-start justify-between gap-4 py-3"
+          >
+            <span className="font-medium text-stone-800 dark:text-stone-200 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors leading-snug">
+              {post.title}
+            </span>
+            <span className="text-xs text-stone-400 shrink-0 mt-0.5 tabular-nums">{post.date}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export default function Home() {
   const recentResearch = getPostMetas("research").slice(0, 3);
   const recentBlog = getPostMetas("blog").slice(0, 3);
@@ -9,59 +31,41 @@ export default function Home() {
     <div className="space-y-16">
       {/* Hero */}
       <section className="space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight">Tresis Labs</h1>
-        <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-xl">
-          An independent research lab exploring systems, compilers, and machine
-          learning — built in an apartment, one experiment at a time.
+        <h1 className="text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-100 leading-tight">
+          Tresis Labs
+        </h1>
+        <p className="text-base text-stone-500 dark:text-stone-400 max-w-lg leading-relaxed">
+          Exploring systems, compilers, and machine learning —
+          built in an apartment, one experiment at a time.
         </p>
       </section>
 
       {/* Recent Research */}
-      <section className="space-y-4">
+      <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Research</h2>
-          <Link href="/research" className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-            View all →
+          <h2 className="text-xs uppercase tracking-widest text-stone-400 font-medium">Research</h2>
+          <Link
+            href="/research"
+            className="text-xs text-stone-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+          >
+            All posts →
           </Link>
         </div>
-        {recentResearch.length === 0 ? (
-          <p className="text-neutral-500 text-sm">No research posts yet.</p>
-        ) : (
-          <ul className="space-y-3">
-            {recentResearch.map((post) => (
-              <li key={post.slug}>
-                <Link href={`/research/${post.slug}`} className="group flex items-start justify-between gap-4">
-                  <span className="font-medium group-hover:underline">{post.title}</span>
-                  <span className="text-sm text-neutral-500 shrink-0">{post.date}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
+        <PostList posts={recentResearch} href="/research" />
       </section>
 
       {/* Recent Blog */}
-      <section className="space-y-4">
+      <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Lab Notes</h2>
-          <Link href="/blog" className="text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-            View all →
+          <h2 className="text-xs uppercase tracking-widest text-stone-400 font-medium">Lab Notes</h2>
+          <Link
+            href="/blog"
+            className="text-xs text-stone-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors"
+          >
+            All posts →
           </Link>
         </div>
-        {recentBlog.length === 0 ? (
-          <p className="text-neutral-500 text-sm">No posts yet.</p>
-        ) : (
-          <ul className="space-y-3">
-            {recentBlog.map((post) => (
-              <li key={post.slug}>
-                <Link href={`/blog/${post.slug}`} className="group flex items-start justify-between gap-4">
-                  <span className="font-medium group-hover:underline">{post.title}</span>
-                  <span className="text-sm text-neutral-500 shrink-0">{post.date}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
+        <PostList posts={recentBlog} href="/blog" />
       </section>
     </div>
   );

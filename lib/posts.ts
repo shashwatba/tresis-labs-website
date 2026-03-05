@@ -34,14 +34,19 @@ export function getPost(section: "research" | "blog", slug: string) {
   return { slug, ...meta };
 }
 
+function stripQuotes(s: string): string {
+  return s.replace(/^["']|["']$/g, "");
+}
+
 function parseFrontmatter(raw: string): Omit<PostMeta, "slug"> {
   const match = raw.match(/^---\n([\s\S]*?)\n---/);
   if (!match) return { title: "Untitled", date: "" };
 
   const frontmatter = match[1];
-  const title = frontmatter.match(/^title:\s*"?(.+?)"?\s*$/m)?.[1] ?? "Untitled";
-  const date = frontmatter.match(/^date:\s*(.+?)\s*$/m)?.[1] ?? "";
-  const description = frontmatter.match(/^description:\s*"?(.+?)"?\s*$/m)?.[1];
+  const title = stripQuotes(frontmatter.match(/^title:\s*(.+?)\s*$/m)?.[1] ?? "Untitled");
+  const date = stripQuotes(frontmatter.match(/^date:\s*(.+?)\s*$/m)?.[1] ?? "");
+  const rawDesc = frontmatter.match(/^description:\s*(.+?)\s*$/m)?.[1];
+  const description = rawDesc ? stripQuotes(rawDesc) : undefined;
 
   return { title, date, description };
 }
